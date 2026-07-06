@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 SCREENSHOTS_DIR = "screenshots"
 
@@ -14,7 +15,14 @@ def chrome_driver(request):
     Usa o Selenium Manager (nativo desde o Selenium 4.6), então não é mais
     preciso baixar/gerenciar o chromedriver manualmente no PATH.
     """
-    driver = webdriver.Chrome()
+    options = Options()
+    if os.getenv("CI"):
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1920,1080")
+    driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(5)
     driver.maximize_window()
     request.cls.driver = driver
