@@ -1,72 +1,74 @@
-# Shein — Automação de testes (busca de produtos shein.com/pt)
+# Shein: test automation (product search on shein.com/pt)
 
-Testes automatizados em Python/Selenium para o fluxo de **busca de produtos** do
-site [shein.com/pt](https://www.shein.com/pt/), seguindo a mesma linha dos
-outros projetos (IKEA-WEB_TEST_AUT, Trotiurban), com algumas atualizações.
+Another automation practice project I put together: this time I applied
+Selenium/Pytest to the **product search** flow on
+[shein.com/pt](https://www.shein.com/pt/), following the same approach as the
+other projects I'd already done (IKEA-WEB_TEST_AUT, Trotiurban), but with
+a few improvements I picked up along the way.
 
-## Estrutura
+## Structure
 
-| Arquivo/Pasta          | Papel                                                                          |
+| File/Folder            | Role                                                                          |
 | ---------------------- | ------------------------------------------------------------------------------- |
-| `data.py`               | URL do site e termos de busca, lidos do `.env` com fallback                     |
-| `helpers.py`            | Utilitários: checar site no ar, digitação/pausas "humanizadas", leitura de `.env` |
-| `common/base_page.py`   | `BasePage` com operações comuns (find, click, digitar humanizado)               |
+| `data.py`               | Site URL and search terms, read from `.env` with fallback                    |
+| `helpers.py`            | Utilities: check if the site is up, "humanized" typing/pauses, `.env` reading |
+| `common/base_page.py`   | `BasePage` with common operations (find, click, humanized typing)            |
 | `SHEIN.py`              | Page Objects: `SheinHomePage`, `SheinSearchResultsPage`, `SheinProductPage`     |
-| `conftest.py`           | Fixture do driver (Chrome) + screenshot automático em falha                    |
-| `TestersiteShein.py`    | Testes pytest                                                                    |
-| `.github/workflows/`    | CI: roda os testes a cada push/PR                                               |
+| `conftest.py`           | Driver fixture (Chrome) plus automatic screenshot on failure                    |
+| `TestersiteShein.py`    | Pytest tests                                                                    |
+| `.github/workflows/`    | CI: runs the tests on every push/PR                                               |
 
-## Novidades em relação ao padrão anterior (IKEA)
+## What's new compared to the previous baseline (IKEA)
 
-- Driver via **Selenium Manager** — sem precisar baixar/configurar chromedriver manualmente.
-- Fixture `chrome_driver` em `conftest.py` no lugar de `setup_class`/`teardown_class`.
-- Config por `.env` (`python-dotenv`) em vez de valores fixos no `data.py`.
-- `BasePage` comum, reaproveitável entre projetos (Shein, Continente, IKEA...).
-- Screenshot automático quando um teste falha (salvo em `screenshots/`).
-- Workflow de CI (GitHub Actions) rodando a suíte a cada push/PR.
+- Driver via **Selenium Manager**, no need to manually download/configure chromedriver.
+- `chrome_driver` fixture in `conftest.py` instead of `setup_class`/`teardown_class`.
+- Config via `.env` (`python-dotenv`) instead of hardcoded values in `data.py`.
+- Shared `BasePage`, reusable across projects (Shein, Continente, IKEA...).
+- Automatic screenshot when a test fails (saved to `screenshots/`).
+- CI workflow (GitHub Actions) running the suite on every push/PR.
 
-## Sobre a digitação "humanizada"
+## About "humanized" typing
 
-Em vez de preencher o campo de busca instantaneamente, `helpers.human_type` digita
-caractere por caractere com pequenas pausas aleatórias, e `helpers.human_pause` insere
-pausas curtas entre ações — deixando a automação com um ritmo mais parecido com o de
-uma pessoa real interagindo com o site.
+Instead of filling the search field instantly, `helpers.human_type` types
+character by character with small random pauses, and `helpers.human_pause` adds
+short pauses between actions, giving the automation a rhythm closer to a real
+person interacting with the site.
 
-## Casos de teste
+## Test cases
 
-- Busca por um termo válido ("vestido") retorna resultados.
-- Busca por um termo inexistente mostra mensagem de "sem resultados".
-- Abrir o primeiro produto da lista exibe título e preço.
-- Adicionar o primeiro produto ao carrinho.
+- Searching for a valid term ("vestido") returns results.
+- Searching for a nonexistent term shows a "no results" message.
+- Opening the first product in the list displays its title and price.
+- Adding the first product to the cart.
 
-## Instalação
+## Installation
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env   # ajuste SHEIN_URL / SEARCH_TERM se necessário
+cp .env.example .env   # adjust SHEIN_URL / SEARCH_TERM if needed
 ```
 
-Requer o Chrome instalado localmente (o Selenium Manager cuida do driver automaticamente).
+Requires Chrome installed locally (Selenium Manager handles the driver automatically).
 
-## Rodando os testes
+## Running the tests
 
 ```bash
 pytest -v
 ```
 
-## Aviso importante
+## Important note
 
-Os locators em `SHEIN.py` são um ponto de partida (marcados com `TODO`) — a Shein
-é um site bem dinâmico (JS pesado, proteção anti-bot, redirecionamento por região),
-e não deu pra inspecionar o DOM real via fetch simples ao montar este projeto.
-**Confirme/ajuste os seletores no site ao vivo antes de rodar de verdade.**
+The locators in `SHEIN.py` are a starting point (marked with `TODO`). Shein
+is a very dynamic site (heavy JS, anti-bot protection, region-based redirects),
+and it wasn't possible to inspect the real DOM via a simple fetch while putting this project together.
+**Confirm/adjust the selectors against the live site before relying on this for real.**
 
-## Publicando no GitHub
+## Publishing to GitHub
 
 ```bash
 git init
 git add .
-git commit -m "Automação de testes de busca de produtos - shein.com/pt"
-git remote add origin <URL_DO_SEU_REPOSITORIO_GITHUB>
+git commit -m "Product search test automation - shein.com/pt"
+git remote add origin <URL_OF_YOUR_GITHUB_REPOSITORY>
 git push -u origin main
 ```

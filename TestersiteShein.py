@@ -4,7 +4,7 @@ from SHEIN import SheinHomePage, SheinProductPage, SheinSearchResultsPage
 
 
 class TestSheinSearch:
-    """Testes automatizados da busca de produtos em shein.com/pt."""
+    """Automated tests for the product search on shein.com/pt."""
 
     def setup_method(self):
         if not helpers.is_url_reachable(data.SHEIN_URL):
@@ -48,6 +48,6 @@ class TestSheinSearch:
         product_page = SheinProductPage(self.driver)
         product_page.add_to_cart()
 
-        # Verificação simples; ajustar depois de confirmar o comportamento
-        # exato do carrinho (ex.: contador no header, mini-cart, etc.).
+        # Simple check for now; refine after confirming the exact cart
+        # behavior (e.g. header counter, mini-cart, etc.).
         helpers.human_pause()

@@ -10,10 +10,10 @@ SCREENSHOTS_DIR = "screenshots"
 
 @pytest.fixture(scope="class", autouse=True)
 def chrome_driver(request):
-    """Sobe um Chrome para a classe de teste inteira e injeta em `self.driver`.
+    """Starts a Chrome instance for the whole test class and injects it into `self.driver`.
 
-    Usa o Selenium Manager (nativo desde o Selenium 4.6), então não é mais
-    preciso baixar/gerenciar o chromedriver manualmente no PATH.
+    Uses Selenium Manager (built in since Selenium 4.6), so there's no longer
+    a need to manually download/manage chromedriver on the PATH.
     """
     options = Options()
     if os.getenv("CI"):
@@ -32,7 +32,7 @@ def chrome_driver(request):
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Salva um screenshot automaticamente quando um teste falha."""
+    """Automatically saves a screenshot when a test fails."""
     outcome = yield
     report = outcome.get_result()
 

@@ -5,12 +5,12 @@ from helpers import human_pause, human_type
 
 
 class BasePage:
-    """Classe base para os Page Objects.
+    """Base class for the Page Objects.
 
-    Concentra as operações comuns (esperar elemento, clicar, digitar de forma
-    humanizada) para reduzir duplicação entre os Page Objects de cada site
-    (Shein, Continente, IKEA, ...). Cada Page Object específico herda desta
-    classe e só define seus próprios locators e fluxos.
+    Concentrates the common operations (waiting for an element, clicking, humanized
+    typing) to reduce duplication between the Page Objects of each site
+    (Shein, Continente, IKEA, ...). Each specific Page Object inherits from this
+    class and only defines its own locators and flows.
     """
 
     DEFAULT_TIMEOUT = 15
@@ -36,7 +36,7 @@ class BasePage:
         human_pause()
 
     def type_human(self, locator, text):
-        """Clica no campo e digita de forma humanizada (caractere por caractere, com pausas)."""
+        """Clicks the field and types in a humanized way (character by character, with pauses)."""
         field = self.find_clickable(locator)
         field.click()
         human_pause(0.2, 0.6)
